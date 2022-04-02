@@ -10,6 +10,8 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    let userDefaults = UserDefaults.standard
+
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -17,29 +19,64 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = createTabBarController()
+        
+        var rootVC = window?.rootViewController
+
+        if !userDefaults.bool(forKey: "firstTimeToUseApplication"){
+            rootVC = createStartNC()
+        }else{
+            rootVC = createTabBarController()
+
+        }
+        
+        
+        window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
         
         
     }
+
+    
+    private func createStartNC()->UINavigationController{
+//        let startNC = SecondStartVC()
+        let startNC = StartScreenVC()
+        userDefaults.set(true, forKey: "firstTimeToUseApplication")
+        return UINavigationController(rootViewController: startNC)
+    }
+    
     
     private func createHomeNC()->UINavigationController{
         let homeNC = HomeVC()
+        homeNC.tabBarItem = UITabBarItem(title: "Sports", image: UIImage(named: "homeIcon"), tag: 1)
         
         return UINavigationController(rootViewController: homeNC)
     }
     
     private func createFavoritesNC()-> UINavigationController{
         let favoriteNC = FavoritesVC()
-        
+        favoriteNC.tabBarItem = UITabBarItem(title: "Favorite", image: UIImage(named: "favoriteIcon"), tag: 2)
         return UINavigationController(rootViewController: favoriteNC)
     }
+    
+    private func createNotificationsNC()-> UINavigationController{
+        let notificationsNC = NotificationsVC()
+        notificationsNC.tabBarItem = UITabBarItem(title: "Favorite", image: UIImage(named: "notificationIcon"), tag: 3)
+        return UINavigationController(rootViewController: notificationsNC)
+    }
+    
+    private func createSettingNC()-> UINavigationController{
+        let settingNC = SettingVC()
+        settingNC.tabBarItem = UITabBarItem(title: "Setting", image: UIImage(named: "settingsIcon"), tag: 4)
+
+        return UINavigationController(rootViewController: settingNC)
+    }
+
     
     func createTabBarController() -> UITabBarController{
         let tabBar = UITabBarController()
         UITabBar.appearance().tintColor = UIColor.init(red: 214/255, green: 24/255, blue: 42/255, alpha: 1)
         tabBar.viewControllers = [createHomeNC(),createFavoritesNC()]
-        UITabBar.appearance().isTranslucent = false
+//        UITabBar.appearance().isTranslucent = true
         UITabBar.appearance().backgroundColor = .white
         
         return tabBar

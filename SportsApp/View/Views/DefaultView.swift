@@ -29,4 +29,18 @@ class DefaultView: UIView {
         backgroundColor                           = .lightGray
     }
     
+    
+    func addShadow(){
+        layer.shadowColor = UIColor.init(_colorLiteralRed: 241/255, green: 241/255, blue: 241/255, alpha: 1).cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 0)
+        layer.shadowOpacity = 0.9
+        layer.shadowRadius = 4.0
+        layer.masksToBounds = false
+    }
+    
+    
+    func addBorder(){
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.darkGray.cgColor
+    }
 }
